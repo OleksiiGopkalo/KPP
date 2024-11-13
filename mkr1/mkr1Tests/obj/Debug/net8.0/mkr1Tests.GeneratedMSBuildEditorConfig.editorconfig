@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = mkr1Tests
-build_property.ProjectDir = /Users/aleksejgopkalo/Module/KPP/mkr1/mkr1Tests/
+build_property.ProjectDir = /Users/aleksejgopkalo/Desktop/ШЕВА/3-й курс/Захист програм і даних/KPP/mkr1/mkr1Tests/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
