@@ -1,42 +1,96 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
-public class Program // Зробіть клас публічним
+public class Program
 {
     public static void Main()
     {
         ProcessInputAndOutputFiles();
     }
 
-    public static void ProcessInputAndOutputFiles() // Зробіть метод публічним
+    public static void ProcessInputAndOutputFiles()
     {
-        // Читання даних з INPUT.TXT
-        string inputText = File.ReadAllText("INPUT.TXT").Trim();
-        string[] numbers = inputText.Split(';');
-        string outputText = "";
+        // Читання чисел з ../INPUT.TXT (на рівень вище)
+        string inputText = File.ReadAllText("../INPUT.TXT").Trim();
+        string[] numbers = inputText.Split(' ');
 
-        foreach (string num in numbers)
+        List<string> results = new List<string>();
+
+        foreach (string number in numbers)
         {
-            int N = int.Parse(num.Trim());
-            int count = CountNumbersNotDivisibleBy235(N);
-            outputText += count + ";";
+            long x = long.Parse(number);
+            int count = CountDivisorsMeetingCondition(x);
+            results.Add(count.ToString());
         }
 
-        // Видалення зайвої крапки з комою і запис у файл OUTPUT.TXT
-        outputText = outputText.TrimEnd(';');
-        File.WriteAllText("OUTPUT.TXT", outputText);
+        // Запис результатів у ../OUTPUT.TXT (на рівень вище)
+        File.WriteAllText("../OUTPUT.TXT", string.Join(" ", results));
     }
 
-    public static int CountNumbersNotDivisibleBy235(int N) // Зробіть метод публічним
+    public static int CountDivisorsMeetingCondition(long x)
     {
+        List<long> primeFactors = GetPrimeFactors(x);
+        List<long> divisors = GetDivisors(x);
+
         int count = 0;
-        for (int i = 1; i <= N; i++)
+
+        foreach (long divisor in divisors)
         {
-            if (i % 2 != 0 && i % 3 != 0 && i % 5 != 0)
+            bool divisibleByAllPrimes = true;
+            foreach (long prime in primeFactors)
+            {
+                if (divisor % prime != 0)
+                {
+                    divisibleByAllPrimes = false;
+                    break;
+                }
+            }
+
+            if (divisibleByAllPrimes)
             {
                 count++;
             }
         }
+
         return count;
+    }
+
+    public static List<long> GetPrimeFactors(long n)
+    {
+        List<long> factors = new List<long>();
+        for (long i = 2; i * i <= n; i++)
+        {
+            while (n % i == 0)
+            {
+                if (!factors.Contains(i))
+                {
+                    factors.Add(i);
+                }
+                n /= i;
+            }
+        }
+        if (n > 1)
+        {
+            factors.Add(n);
+        }
+        return factors;
+    }
+
+    public static List<long> GetDivisors(long n)
+    {
+        List<long> divisors = new List<long>();
+        for (long i = 1; i * i <= n; i++)
+        {
+            if (n % i == 0)
+            {
+                divisors.Add(i);
+                if (i != n / i)
+                {
+                    divisors.Add(n / i);
+                }
+            }
+        }
+        return divisors;
     }
 }
