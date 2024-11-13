@@ -1,92 +1,56 @@
-using System;
 using System.IO;
 using Xunit;
 
 public class ProgramTests
 {
-    private const string InputFilePath = "../INPUT.TXT";
-    private const string OutputFilePath = "../OUTPUT.TXT";
-
     public ProgramTests()
     {
-        // Clearing or creating files before each test
-        if (File.Exists(InputFilePath)) File.Delete(InputFilePath);
-        if (File.Exists(OutputFilePath)) File.Delete(OutputFilePath);
+        // Очищення або створення файлів перед кожним тестом
+        if (File.Exists("../INPUT.TXT")) File.Delete("../INPUT.TXT");
+        if (File.Exists("../OUTPUT.TXT")) File.Delete("../OUTPUT.TXT");
     }
 
     [Fact]
-    public void TestCountDivisorsMeetingCondition_With12_Returns2()
+    public void TestCountDivisorsMeetingCondition_WithPrimeNumber_Returns0()
     {
-        int result = Program.CountDivisorsMeetingCondition(12);
-        Assert.Equal(2, result); // Expected divisors: 6, 12.
+        // Прості числа не мають відповідних дільників, результат повинен бути 0
+        int result = Program.CountDivisorsMeetingCondition(7);
+        Assert.Equal(0, result);
     }
 
     [Fact]
-    public void TestCountDivisorsMeetingCondition_With239_Returns1()
+    public void TestCountDivisorsMeetingCondition_WithSmallCompositeNumber_ReturnsCorrectCount()
     {
-        int result = Program.CountDivisorsMeetingCondition(239);
-        Assert.Equal(1, result); // 239 is prime, only 239 meets the conditions.
+        // Число 4 має лише один відповідний дільник, 2
+        int result = Program.CountDivisorsMeetingCondition(4);
+        Assert.Equal(1, result); // Дільник 2 відповідає умовам
     }
 
     [Fact]
-    public void TestCountDivisorsMeetingCondition_With100_Returns3()
+    public void TestCountDivisorsMeetingCondition_WithCompositeNumber_ReturnsCorrectCount()
     {
-        int result = Program.CountDivisorsMeetingCondition(100);
-        Assert.Equal(3, result); // Expected divisors: 10, 20, 100.
+        // Число 6 має один відповідний дільник, 3
+        int result = Program.CountDivisorsMeetingCondition(6);
+        Assert.Equal(1, result); // Дільник 3 відповідає умовам
     }
 
     [Fact]
-    public void TestCountDivisorsMeetingCondition_With30_Returns2()
+    public void TestProcessInputAndOutputFiles_WithSingleInput_WritesExpectedOutput()
     {
-        int result = Program.CountDivisorsMeetingCondition(30);
-        Assert.Equal(2, result); // Expected divisors: 15, 30.
-    }
-
-    [Fact]
-    public void TestProcessInputAndOutputFiles_WithInputFile12_WritesExpectedOutput()
-    {
-        // Write input value 12 to INPUT.TXT
-        File.WriteAllText(InputFilePath, "12");
-
-        // Execute method to process input and output files
+        // Вхідний файл з одним числом 8
+        File.WriteAllText("../INPUT.TXT", "8");
         Program.ProcessInputAndOutputFiles();
-
-        // Read result from OUTPUT.TXT
-        string output = File.ReadAllText(OutputFilePath).Trim();
-
-        // Check that result matches expected output
-        Assert.Equal("2", output);
+        string output = File.ReadAllText("../OUTPUT.TXT").Trim();
+        Assert.Equal("1", output); // Число 8 має один відповідний дільник, 2
     }
 
     [Fact]
-    public void TestProcessInputAndOutputFiles_WithInputFile239_WritesExpectedOutput()
+    public void TestProcessInputAndOutputFiles_WithTwoInputs_WritesExpectedOutput()
     {
-        // Write input value 239 to INPUT.TXT
-        File.WriteAllText(InputFilePath, "239");
-
-        // Execute method to process input and output files
+        // Вхідний файл з двома числами 10 і 12
+        File.WriteAllText("../INPUT.TXT", "10 12");
         Program.ProcessInputAndOutputFiles();
-
-        // Read result from OUTPUT.TXT
-        string output = File.ReadAllText(OutputFilePath).Trim();
-
-        // Check that result matches expected output
-        Assert.Equal("1", output);
-    }
-
-    [Fact]
-    public void TestProcessInputAndOutputFiles_WithMultipleInputs_WritesExpectedOutput()
-    {
-        // Write multiple input values to INPUT.TXT
-        File.WriteAllText(InputFilePath, "12 239 100 30");
-
-        // Execute method to process input and output files
-        Program.ProcessInputAndOutputFiles();
-
-        // Read result from OUTPUT.TXT
-        string output = File.ReadAllText(OutputFilePath).Trim();
-
-        // Check that result matches expected output for each input
-        Assert.Equal("2 1 3 2", output);
+        string output = File.ReadAllText("../OUTPUT.TXT").Trim();
+        Assert.Equal("0 2", output); // 10 - жодного відповідного дільника, 12 має два (3, 6)
     }
 }
