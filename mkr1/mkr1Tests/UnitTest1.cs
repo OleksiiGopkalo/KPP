@@ -1,72 +1,92 @@
+using System;
 using System.IO;
 using Xunit;
 
 public class ProgramTests
 {
+    private const string InputFilePath = "../INPUT.TXT";
+    private const string OutputFilePath = "../OUTPUT.TXT";
+
     public ProgramTests()
     {
-        // Очищення або створення файлів перед кожним тестом
-        if (File.Exists("INPUT.TXT")) File.Delete("INPUT.TXT");
-        if (File.Exists("OUTPUT.TXT")) File.Delete("OUTPUT.TXT");
+        // Clearing or creating files before each test
+        if (File.Exists(InputFilePath)) File.Delete(InputFilePath);
+        if (File.Exists(OutputFilePath)) File.Delete(OutputFilePath);
     }
 
     [Fact]
     public void TestCountDivisorsMeetingCondition_With12_Returns2()
     {
         int result = Program.CountDivisorsMeetingCondition(12);
-        Assert.Equal(2, result); // Прості дільники: 2, 3. Дільники, що діляться на обидва: 6, 12.
+        Assert.Equal(2, result); // Expected divisors: 6, 12.
     }
 
     [Fact]
     public void TestCountDivisorsMeetingCondition_With239_Returns1()
     {
         int result = Program.CountDivisorsMeetingCondition(239);
-        Assert.Equal(1, result); // 239 - просте число, єдиний дільник, що відповідає умовам, це 239.
+        Assert.Equal(1, result); // 239 is prime, only 239 meets the conditions.
     }
 
     [Fact]
     public void TestCountDivisorsMeetingCondition_With100_Returns3()
     {
         int result = Program.CountDivisorsMeetingCondition(100);
-        Assert.Equal(3, result); // Прості дільники: 2, 5. Дільники, що діляться на обидва: 10, 20, 100.
+        Assert.Equal(3, result); // Expected divisors: 10, 20, 100.
     }
 
     [Fact]
     public void TestCountDivisorsMeetingCondition_With30_Returns2()
     {
         int result = Program.CountDivisorsMeetingCondition(30);
-        Assert.Equal(2, result); // Прості дільники: 2, 3, 5. Дільники, що діляться на всі: 30.
+        Assert.Equal(2, result); // Expected divisors: 15, 30.
     }
 
     [Fact]
     public void TestProcessInputAndOutputFiles_WithInputFile12_WritesExpectedOutput()
     {
-        // Запис вхідного значення 12 у файл INPUT.TXT
-        File.WriteAllText("INPUT.TXT", "12");
+        // Write input value 12 to INPUT.TXT
+        File.WriteAllText(InputFilePath, "12");
 
-        // Запуск методу для обробки вхідного і вихідного файлів
+        // Execute method to process input and output files
         Program.ProcessInputAndOutputFiles();
 
-        // Читання результату з OUTPUT.TXT
-        string output = File.ReadAllText("OUTPUT.TXT").Trim();
+        // Read result from OUTPUT.TXT
+        string output = File.ReadAllText(OutputFilePath).Trim();
 
-        // Перевірка, що результат дорівнює 2
+        // Check that result matches expected output
         Assert.Equal("2", output);
     }
 
     [Fact]
     public void TestProcessInputAndOutputFiles_WithInputFile239_WritesExpectedOutput()
     {
-        // Запис вхідного значення 239 у файл INPUT.TXT
-        File.WriteAllText("INPUT.TXT", "239");
+        // Write input value 239 to INPUT.TXT
+        File.WriteAllText(InputFilePath, "239");
 
-        // Запуск методу для обробки вхідного і вихідного файлів
+        // Execute method to process input and output files
         Program.ProcessInputAndOutputFiles();
 
-        // Читання результату з OUTPUT.TXT
-        string output = File.ReadAllText("OUTPUT.TXT").Trim();
+        // Read result from OUTPUT.TXT
+        string output = File.ReadAllText(OutputFilePath).Trim();
 
-        // Перевірка, що результат дорівнює 1
+        // Check that result matches expected output
         Assert.Equal("1", output);
+    }
+
+    [Fact]
+    public void TestProcessInputAndOutputFiles_WithMultipleInputs_WritesExpectedOutput()
+    {
+        // Write multiple input values to INPUT.TXT
+        File.WriteAllText(InputFilePath, "12 239 100 30");
+
+        // Execute method to process input and output files
+        Program.ProcessInputAndOutputFiles();
+
+        // Read result from OUTPUT.TXT
+        string output = File.ReadAllText(OutputFilePath).Trim();
+
+        // Check that result matches expected output for each input
+        Assert.Equal("2 1 3 2", output);
     }
 }
